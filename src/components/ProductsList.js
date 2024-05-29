@@ -20,7 +20,6 @@ const ProductsList = () => {
       sortBySellingPrice(list);
       setProducts(list);
       setLoading(false);
-      console.log(list);
     } catch (err) {
       console.log(err);
     }
@@ -37,8 +36,7 @@ const ProductsList = () => {
     e.preventDefault();
     try {
       const response = await postRequest("/products", formData);
-      console.log(response);
-      window.alert("Product added Successfully!!");
+      window.alert(response?.data);
       fetchProducts();
       handleClose();
     } catch (err) {
