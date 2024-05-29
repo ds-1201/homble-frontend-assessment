@@ -11,5 +11,8 @@ export const PRODUCT_ID_URL = (id) => {
 };
 
 export const sortBySellingPrice = (list) => {
-  list.sort((a, b) => parseInt(a.selling_price) - parseInt(b.selling_price));
+  if (!list) return list;
+  return [...list].sort(
+    (a, b) => parseInt(a.selling_price) - parseInt(b.selling_price)
+  );
 };

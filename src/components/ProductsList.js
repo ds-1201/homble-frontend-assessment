@@ -5,31 +5,19 @@ import { Link } from "react-router-dom";
 import { toast } from "react-toastify";
 
 // helpers
-import { getRequest, postRequest } from "../axios";
+import { postRequest } from "../axios";
 import { PRODUCTS_URL, sortBySellingPrice } from "../helpers";
 
 // components
 import ProductCard from "./ProductCard";
 import ProductModal from "./ProductModal";
+import useFetch from "../hooks/useFetch";
 
 const ProductsList = () => {
-  const [products, setProducts] = useState([]);
-  const [loading, setLoading] = useState(true);
+  const [products, setProducts] = useState(null);
   const [show, setShow] = useState(false);
-
-  const fetchProducts = async () => {
-    try {
-      const response = await getRequest(PRODUCTS_URL());
-      const list = response.data;
-      sortBySellingPrice(list);
-      setProducts(list);
-    } catch (err) {
-      console.log(err);
-      toast.error("Something Went Wrong!!");
-    } finally {
-      setLoading(false);
-    }
-  };
+  const [data, loading, fetchData] = useFetch(PRODUCTS_URL());
+  const displayProducts = sortBySellingPrice(products);
 
   const handleClose = () => setShow(false);
   const handleShow = () => setShow(true);
@@ -39,7 +27,7 @@ const ProductsList = () => {
     try {
       const response = await postRequest(PRODUCTS_URL(), formData);
       toast.success(response?.data);
-      fetchProducts();
+      fetchData();
       handleClose();
     } catch (err) {
       console.log(err);
@@ -48,9 +36,9 @@ const ProductsList = () => {
   };
 
   useEffect(() => {
-    fetchProducts();
+    setProducts(data);
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, []);
+  }, [data]);
 
   return (
     <Container>
@@ -89,7 +77,7 @@ const ProductsList = () => {
             </div>
           </div>
           <Row className=" g-4">
-            {products.map((product) => (
+            {displayProducts?.map((product) => (
               <Col key={product.id} md={6} lg={4} sm={12} xs={12}>
                 <ProductCard product={product} />
               </Col>

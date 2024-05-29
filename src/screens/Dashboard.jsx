@@ -1,46 +1,35 @@
 import React, { useState, useEffect } from "react";
 import { Table, Button, Form, FormControl, Spinner } from "react-bootstrap";
 import { Link } from "react-router-dom";
-import { toast } from "react-toastify";
 
 // helpers
 import { DASHBOARD_URL } from "../helpers";
-import { getRequest } from "../axios";
+import useFetch from "../hooks/useFetch";
 
 const Dashboard = () => {
-  const [products, setProducts] = useState([]);
+  const [products, setProducts] = useState(null);
   const [sortTerm, setSortTerm] = useState("");
   const [input, setInput] = useState("");
   const [sortedProducts, setSortedProducts] = useState([]);
-  const [loading, setLoading] = useState(true);
+  const [data, loading] = useFetch(DASHBOARD_URL());
 
-  const fetchProducts = async () => {
-    setLoading(true);
-    try {
-      const response = await getRequest(DASHBOARD_URL());
-      setProducts(response.data);
-    } catch (err) {
-      console.log(err);
-      toast.error("Something Went Wrong!!");
-    } finally {
-      setLoading(false);
+  useEffect(() => {
+    setProducts(data);
+  }, [data]);
+
+  useEffect(() => {
+    if (products != null) {
+      setSortedProducts(
+        [...(input !== "" ? sortedProducts : products)].sort((a, b) => {
+          if (sortTerm === "id") return parseInt(a.id) - parseInt(b.id);
+          else if (sortTerm === "price")
+            return parseInt(a.selling_price) - parseInt(b.selling_price);
+          else if (sortTerm === "name") return a.name > b.name ? 1 : -1;
+          else return parseInt(a.id) - parseInt(b.id);
+        })
+      );
     }
-  };
 
-  useEffect(() => {
-    fetchProducts();
-  }, []);
-
-  useEffect(() => {
-    setSortedProducts(
-      [...(input !== "" ? sortedProducts : products)].sort((a, b) => {
-        if (sortTerm === "id") return parseInt(a.id) - parseInt(b.id);
-        else if (sortTerm === "price")
-          return parseInt(a.selling_price) - parseInt(b.selling_price);
-        else if (sortTerm === "name") return a.name > b.name ? 1 : -1;
-        else return parseInt(a.id) - parseInt(b.id);
-      })
-    );
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [sortTerm, products, input]);
 
@@ -132,7 +121,7 @@ const Dashboard = () => {
               </td>
             </tr>
           ) : (
-            sortedProducts.map((product) => (
+            sortedProducts?.map((product) => (
               <tr key={product.id}>
                 <td>{product.id}</td>
                 <td>{product.selling_price}</td>
