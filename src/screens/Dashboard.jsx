@@ -13,7 +13,10 @@ import { FaSortDown, FaSortUp } from "react-icons/fa";
 
 // helpers
 import { DASHBOARD_URL } from "../helpers";
+
+// hooks
 import useFetch from "../hooks/useFetch";
+import DashboardTableRow from "../components/DashboardTableRow";
 
 const Dashboard = () => {
   const [products, setProducts] = useState(null);
@@ -40,7 +43,6 @@ const Dashboard = () => {
               direction
             );
           else if (sortTerm === "name") {
-            console.log(a.name.localeCompare(b.name));
             return a.name.localeCompare(b.name) * direction;
           } else return parseInt(a.id) - parseInt(b.id);
         })
@@ -184,19 +186,11 @@ const Dashboard = () => {
             </tr>
           ) : (
             sortedProducts?.map((product) => (
-              <tr key={product.id}>
-                <td>{product.id}</td>
-                <td>{product.selling_price}</td>
-                <td>{product.name}</td>
-                <td>
-                  <Button
-                    variant="danger"
-                    onClick={() => handleCheck(product.id)}
-                  >
-                    Check
-                  </Button>
-                </td>
-              </tr>
+              <DashboardTableRow
+                product={product}
+                key={product.id}
+                handleCheck={handleCheck}
+              />
             ))
           )}
         </tbody>

@@ -29,11 +29,7 @@ const ProductDisplay = ({ id }) => {
   }, []);
 
   return (
-    <Container
-      style={{
-        padding: "3rem",
-      }}
-    >
+    <Container>
       {loading ? (
         <div
           style={{

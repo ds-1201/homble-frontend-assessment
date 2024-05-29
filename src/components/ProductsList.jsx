@@ -11,6 +11,8 @@ import { PRODUCTS_URL, sortBySellingPrice } from "../helpers";
 // components
 import ProductCard from "./ProductCard";
 import ProductModal from "./ProductModal";
+
+// hooks
 import useFetch from "../hooks/useFetch";
 
 const ProductsList = () => {
