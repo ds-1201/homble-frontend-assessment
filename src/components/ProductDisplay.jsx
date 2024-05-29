@@ -56,7 +56,7 @@ const ProductDisplay = ({ id }) => {
         <div>Product not found</div>
       ) : (
         <>
-          <div>
+          <div className="d-flex justify-content-between">
             <Link to="/">
               <Button
                 style={{
@@ -69,12 +69,12 @@ const ProductDisplay = ({ id }) => {
             </Link>
           </div>
 
-          <div style={{ display: "flex" }}>
-            <div style={{ flex: 1 }}>
-              <h1>{product.name}</h1>
+          <div className="d-flex flex-column flex-md-row justify-content-md-between justify-content-center align-items-center align-items-md-start">
+            <div className="mb-3">
+              <h1 className="mb-3">{product.name}</h1>
               <p>Price: {product.selling_price}</p>
             </div>
-            <div>
+            <div className="mb-3">
               <Image
                 className="mt-1 mb-3"
                 src={product.productImage}

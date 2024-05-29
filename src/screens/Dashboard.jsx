@@ -20,8 +20,8 @@ import DashboardTableRow from "../components/DashboardTableRow";
 
 const Dashboard = () => {
   const [products, setProducts] = useState(null);
-  const [sortTerm, setSortTerm] = useState("");
-  const [sortDirection, setSortDirection] = useState("");
+  const [sortTerm, setSortTerm] = useState("id");
+  const [sortDirection, setSortDirection] = useState("asc");
   const [input, setInput] = useState("");
   const [sortedProducts, setSortedProducts] = useState([]);
   const [data, loading] = useFetch(DASHBOARD_URL());

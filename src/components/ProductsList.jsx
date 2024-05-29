@@ -1,8 +1,8 @@
 import React, { useEffect, useState } from "react";
-import Skeleton from "react-loading-skeleton";
 import { Container, Row, Col, Button } from "react-bootstrap";
 import { Link } from "react-router-dom";
 import { toast } from "react-toastify";
+import Skeleton from "react-loading-skeleton";
 
 // helpers
 import { postRequest } from "../axios";
@@ -42,10 +42,8 @@ const ProductsList = () => {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [data]);
 
-  console.log("rum");
-
   return (
-    <Container>
+    <Container fluid className="p-0">
       <ProductModal
         show={show}
         handleClose={handleClose}
@@ -53,7 +51,7 @@ const ProductsList = () => {
       />
 
       {loading ? (
-        <Row>
+        <Row className="d-flex justify-content-center">
           {[1, 2, 3, 4, 5, 6, 7, 8, 9].map((i) => (
             <Col key={i} md={6} lg={4} sm={12} xs={12}>
               <Skeleton height={"30vh"} />
@@ -61,33 +59,40 @@ const ProductsList = () => {
           ))}
         </Row>
       ) : (
-        <>
-          <div className="d-flex justify-content-sm-between justify-content-md-between flex-sm-column flex-md-row">
-            <h1>Products</h1>
-            <div>
-              <Link to="/dashboard">
+        <Row className="d-flex justify-content-center">
+          <Col md={10}>
+            <div className="d-flex justify-content-between">
+              <h1>Products</h1>
+              <div>
+                <Link className="d-inline-block" to="/dashboard">
+                  <Button
+                    style={{
+                      marginRight: "1rem",
+                    }}
+                    variant="primary"
+                  >
+                    Dashboard
+                  </Button>
+                </Link>
                 <Button
-                  style={{
-                    marginRight: "1rem",
-                  }}
+                  className="d-inline-block"
                   variant="primary"
+                  onClick={handleShow}
                 >
-                  Dashboard
+                  Add Product
                 </Button>
-              </Link>
-              <Button variant="primary" onClick={handleShow}>
-                Add Product
-              </Button>
+              </div>
             </div>
-          </div>
-          <Row className=" g-4">
-            {displayProducts?.map((product) => (
-              <Col key={product.id} md={6} lg={4} sm={12} xs={12}>
-                <ProductCard product={product} />
-              </Col>
-            ))}
-          </Row>
-        </>
+
+            <Row className="g-4">
+              {displayProducts?.map((product) => (
+                <Col key={product.id} md={6} lg={4} sm={12} xs={12}>
+                  <ProductCard product={product} />
+                </Col>
+              ))}
+            </Row>
+          </Col>
+        </Row>
       )}
     </Container>
   );
