@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { getRequest } from "../axios";
-import { Container, Spinner, Accordion, Image } from "react-bootstrap";
+import { Container, Spinner, Accordion, Image, Button } from "react-bootstrap";
+import { Link } from "react-router-dom";
 
 const ProductDisplay = ({ id }) => {
   const [product, setProduct] = useState(null);
@@ -19,6 +20,7 @@ const ProductDisplay = ({ id }) => {
 
   useEffect(() => {
     fetchProduct();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   return (
@@ -53,6 +55,19 @@ const ProductDisplay = ({ id }) => {
         <div>Product not found</div>
       ) : (
         <>
+          <div>
+            <Link to="/">
+              <Button
+                style={{
+                  marginRight: "1rem",
+                }}
+                variant="danger"
+              >
+                Back
+              </Button>
+            </Link>
+          </div>
+
           <div style={{ display: "flex" }}>
             <div style={{ flex: 1 }}>
               <h1>{product.name}</h1>

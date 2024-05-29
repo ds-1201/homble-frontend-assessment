@@ -7,6 +7,7 @@ import { getRequest, postRequest } from "../axios";
 // components
 import ProductCard from "./ProductCard";
 import ProductModal from "./ProductModal";
+import { Link } from "react-router-dom";
 
 const ProductsList = () => {
   const [products, setProducts] = useState([]);
@@ -19,9 +20,10 @@ const ProductsList = () => {
       const list = response.data;
       sortBySellingPrice(list);
       setProducts(list);
-      setLoading(false);
     } catch (err) {
       console.log(err);
+    } finally {
+      setLoading(false);
     }
   };
 
@@ -46,6 +48,7 @@ const ProductsList = () => {
 
   useEffect(() => {
     fetchProducts();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   return (
@@ -68,9 +71,21 @@ const ProductsList = () => {
         <>
           <div className="d-flex align-items-center justify-content-between">
             <h1>Products</h1>
-            <Button variant="primary" onClick={handleShow}>
-              Add Product
-            </Button>
+            <div>
+              <Link to="/dashboard">
+                <Button
+                  style={{
+                    marginRight: "1rem",
+                  }}
+                  variant="primary"
+                >
+                  Dashboard
+                </Button>
+              </Link>
+              <Button variant="primary" onClick={handleShow}>
+                Add Product
+              </Button>
+            </div>
           </div>
           <Row className=" g-4">
             {products.map((product) => (
