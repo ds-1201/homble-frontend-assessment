@@ -1,7 +1,11 @@
 import React, { useState, useEffect } from "react";
 import { Table, Button, Form, FormControl, Spinner } from "react-bootstrap";
-import { getRequest } from "../axios";
 import { Link } from "react-router-dom";
+import { toast } from "react-toastify";
+
+// helpers
+import { DASHBOARD_URL } from "../helpers";
+import { getRequest } from "../axios";
 
 const Dashboard = () => {
   const [products, setProducts] = useState([]);
@@ -10,29 +14,31 @@ const Dashboard = () => {
   const [sortedProducts, setSortedProducts] = useState([]);
   const [loading, setLoading] = useState(true);
 
+  const fetchProducts = async () => {
+    setLoading(true);
+    try {
+      const response = await getRequest(DASHBOARD_URL());
+      setProducts(response.data);
+    } catch (err) {
+      console.log(err);
+      toast.error("Something Went Wrong!!");
+    } finally {
+      setLoading(false);
+    }
+  };
+
   useEffect(() => {
-    const fetchProducts = async () => {
-      setLoading(true);
-      try {
-        const response = await getRequest("/dashboard");
-        setProducts(response.data);
-      } catch (err) {
-        console.log(err);
-      } finally {
-        setLoading(false);
-      }
-    };
     fetchProducts();
   }, []);
 
   useEffect(() => {
     setSortedProducts(
       [...(input !== "" ? sortedProducts : products)].sort((a, b) => {
-        if (sortTerm === "id") return parseInt(a.id) > parseInt(b.id) ? 1 : -1;
+        if (sortTerm === "id") return parseInt(a.id) - parseInt(b.id);
         else if (sortTerm === "price")
-          return parseInt(a.selling_price) > parseInt(b.selling_price) ? 1 : -1;
+          return parseInt(a.selling_price) - parseInt(b.selling_price);
         else if (sortTerm === "name") return a.name > b.name ? 1 : -1;
-        else return parseInt(a.id) > parseInt(b.id) ? 1 : -1;
+        else return parseInt(a.id) - parseInt(b.id);
       })
     );
     // eslint-disable-next-line react-hooks/exhaustive-deps

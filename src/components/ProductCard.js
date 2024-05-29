@@ -1,6 +1,14 @@
 import { Card } from "react-bootstrap";
 import { Link } from "react-router-dom";
 
+const CardHeight = {
+  sm: "20vh",
+  md: "30vh",
+  lg: "40vh",
+  xl: "50vh",
+  xxl: "60vh",
+};
+
 const ProductCard = ({ product }) => {
   return (
     <Link
@@ -13,7 +21,7 @@ const ProductCard = ({ product }) => {
       <Card
         style={{
           width: "100%",
-          minHeight: "55vh",
+          minHeight: CardHeight,
           cursor: "pointer",
         }}
       >

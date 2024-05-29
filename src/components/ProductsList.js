@@ -1,13 +1,16 @@
 import React, { useEffect, useState } from "react";
 import Skeleton from "react-loading-skeleton";
 import { Container, Row, Col, Button } from "react-bootstrap";
+import { Link } from "react-router-dom";
+import { toast } from "react-toastify";
+
 // helpers
 import { getRequest, postRequest } from "../axios";
+import { PRODUCTS_URL, sortBySellingPrice } from "../helpers";
 
 // components
 import ProductCard from "./ProductCard";
 import ProductModal from "./ProductModal";
-import { Link } from "react-router-dom";
 
 const ProductsList = () => {
   const [products, setProducts] = useState([]);
@@ -16,19 +19,16 @@ const ProductsList = () => {
 
   const fetchProducts = async () => {
     try {
-      const response = await getRequest("/products");
+      const response = await getRequest(PRODUCTS_URL());
       const list = response.data;
       sortBySellingPrice(list);
       setProducts(list);
     } catch (err) {
       console.log(err);
+      toast.error("Something Went Wrong!!");
     } finally {
       setLoading(false);
     }
-  };
-
-  const sortBySellingPrice = (list) => {
-    list.sort((a, b) => a.selling_price - b.selling_price);
   };
 
   const handleClose = () => setShow(false);
@@ -37,12 +37,13 @@ const ProductsList = () => {
   const handleSubmit = async (e, formData) => {
     e.preventDefault();
     try {
-      const response = await postRequest("/products", formData);
-      window.alert(response?.data);
+      const response = await postRequest(PRODUCTS_URL(), formData);
+      toast.success(response?.data);
       fetchProducts();
       handleClose();
     } catch (err) {
       console.log(err);
+      toast.error("Something Went Wrong!!");
     }
   };
 
@@ -69,7 +70,7 @@ const ProductsList = () => {
         </Row>
       ) : (
         <>
-          <div className="d-flex align-items-center justify-content-between">
+          <div className="d-flex justify-content-sm-between justify-content-md-between flex-sm-column flex-md-row">
             <h1>Products</h1>
             <div>
               <Link to="/dashboard">

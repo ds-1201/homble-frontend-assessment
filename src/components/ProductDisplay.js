@@ -1,7 +1,11 @@
 import React, { useEffect, useState } from "react";
-import { getRequest } from "../axios";
 import { Container, Spinner, Accordion, Image, Button } from "react-bootstrap";
 import { Link } from "react-router-dom";
+import { toast } from "react-toastify";
+
+// helpers
+import { getRequest } from "../axios";
+import { PRODUCT_ID_URL } from "../helpers";
 
 const ProductDisplay = ({ id }) => {
   const [product, setProduct] = useState(null);
@@ -9,10 +13,11 @@ const ProductDisplay = ({ id }) => {
 
   const fetchProduct = async () => {
     try {
-      const response = await getRequest(`/products/${id}`);
+      const response = await getRequest(PRODUCT_ID_URL(id));
       setProduct(response.data);
     } catch (err) {
       console.log(err);
+      toast.error("Something Went Wrong!!");
     } finally {
       setLoading(false);
     }
